@@ -1,142 +1,187 @@
-<center> <h1>HBNB - The Console</h1> </center>
+# AirBnB Clone - Database Storage
 
-This repository contains the initial stage of a student project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
+## Table of Contents
+- [Introduction](#introduction)
+- [Project Overview](#project-overview)
+- [Learning Objectives](#learning-objectives)
+- [Requirements](#requirements)
+- [File Structure](#file-structure)
+- [Tests](#tests)
+- [Database Setup](#database-setup)
+- [Storage Engines](#storage-engines)
+- [Models](#models)
+- [Relationships](#relationships)
+- [Conclusion](#conclusion)
 
----
+## Introduction
 
-<center><h3>Repository Contents by Project Task</h3> </center>
+This project is the continuation of the AirBnB clone project, where the goal is to create a web application that mimics the functionality of the AirBnB website. In this phase, the focus is on transitioning the storage system from a file-based storage (FileStorage) to a database-based storage (DBStorage) using SQLAlchemy. This modification of the project is by Hector Macassa and Plantinah Tshukudu.
 
-| Tasks | Files | Description |
-| ----- | ----- | ------ |
-| 0: Authors/README File | [AUTHORS](https://github.com/justinmajetich/AirBnB_clone/blob/dev/AUTHORS) | Project authors |Plantinah and Hector
-| 1: Pep8 | N/A | All code is pep8 compliant|
-| 2: Unit Testing | [/tests](https://github.com/justinmajetich/AirBnB_clone/tree/dev/tests) | All class-defining modules are unittested |
-| 3. Make BaseModel | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Defines a parent class to be inherited by all model classes|
-| 4. Update BaseModel w/ kwargs | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Add functionality to recreate an instance of a class from a dictionary representation|
-| 5. Create FileStorage class | [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) [/models/_ _init_ _.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/__init__.py) [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Defines a class to manage persistent file storage system|
-| 6. Console 0.0.1 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) | Add basic functionality to console program, allowing it to quit, handle empty lines and ^D |
-| 7. Console 0.1 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) | Update the console with methods allowing the user to create, destroy, show, and update stored data |
-| 8. Create User class | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) [/models/user.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/user.py) | Dynamically implements a user class |
-| 9. More Classes | [/models/user.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/user.py) [/models/place.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/place.py) [/models/city.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/city.py) [/models/amenity.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/amenity.py) [/models/state.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/state.py) [/models/review.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/review.py) | Dynamically implements more classes |
-| 10. Console 1.0 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) | Update the console and file storage system to work dynamically with all  classes update file storage |
-<br>
-<br>
-<center> <h2>General Use</h2> </center>
+## Project Overview
 
-1. First clone this repository.
+The objective of this project is to implement a database storage engine that can handle various models and their relationships. The project includes the following tasks:
 
-3. Once the repository is cloned locate the "console.py" file and run it as follows:
-```
-/AirBnB_clone$ ./console.py
-```
-4. When this command is run the following prompt should appear:
-```
-(hbnb)
-```
-5. This prompt designates you are in the "HBnB" console. There are a variety of commands available within the console program.
+1. Forking the existing codebase and updating the repository name to `AirBnB_clone_v2`.
+2. Ensuring all existing unit tests pass with both storage engines (FileStorage and DBStorage).
+3. Implementing a new storage engine, `DBStorage`, that uses SQLAlchemy to interact with a MySQL database.
+4. Updating the existing models to work with the new `DBStorage` engine, including the addition of SQLAlchemy-specific attributes and relationships.
+5. Implementing a new model, `Amenity`, and its relationship with the `Place` model.
+6. Ensuring the console application (command interpreter) works with both storage engines.
 
-##### Commands
-    * create - Creates an instance based on given class
+## Learning Objectives
 
-    * destroy - Destroys an object based on class and UUID
+By the end of this project, you should be able to explain the following concepts to anyone, without the help of Google:
 
-    * show - Shows an object based on class and UUID
+- What is Unit testing and how to implement it in a large project
+- What are `*args` and how to use them
+- What are `**kwargs` and how to use them
+- How to handle named arguments in a function
+- How to create a MySQL database
+- How to create a MySQL user and grant it privileges
+- What ORM means
+- How to map a Python Class to a MySQL table
+- How to handle 2 different storage engines with the same codebase
+- How to use environment variables
 
-    * all - Shows all objects the program has access to, or all objects of a given class
+## Requirements
 
-    * update - Updates existing attributes an object based on class name and UUID
+The project has the following requirements:
 
-    * quit - Exits the program (EOF will as well)
+- Python Scripts:
+  - Allowed editors: `vi`, `vim`, `emacs`
+  - All files will be interpreted/compiled on Ubuntu 20.04 LTS using Python 3.8.5
+  - All files should end with a new line
+  - The first line of all files should be exactly `#!/usr/bin/python3`
+  - A `README.md` file, at the root of the folder of the project, is mandatory
+  - The code should use the `pycodestyle` (version 2.8.\*) style guide
+  - All files must be executable
 
+- Python Unit Tests:
+  - Allowed editors: `vi`, `vim`, `emacs`
+  - All files should end with a new line
+  - All test files should be inside a folder `tests`
+  - You have to use the `unittest` module
+  - All test files should be Python files (extension: `.py`)
+  - All test files and folders should start by `test_`
+  - Your file organization in the `tests` folder should be the same as your project
+  - All tests should be executed by using this command: `python3 -m unittest discover tests`
+  - You can also test file by file by using this command: `python3 -m unittest tests/test_models/test_base_model.py`
 
-##### Alternative Syntax
-Users are able to issue a number of console command using an alternative syntax:
+- SQL Scripts:
+  - Allowed editors: `vi`, `vim`, `emacs`
+  - All files will be executed on Ubuntu 20.04 LTS using MySQL 8.0
+  - Your files will be executed with SQLAlchemy version 1.4.x
+  - All files should end with a new line
+  - All SQL queries should have a comment just before (i.e., syntax above)
+  - All SQL keywords should be in uppercase (SELECT, WHERE, ...)
+  - A `README.md` file, at the root of the folder of the project, is mandatory
+  - The length of your files will be tested using `wc`
 
-	Usage: <class_name>.<command>([<id>[name_arg value_arg]|[kwargs]])
-Advanced syntax is implemented for the following commands: 
+## File Structure
 
-    * all - Shows all objects the program has access to, or all objects of a given class
-
-	* count - Return number of object instances by class
-
-    * show - Shows an object based on class and UUID
-
-	* destroy - Destroys an object based on class and UUID
-
-    * update - Updates existing attributes an object based on class name and UUID
-
-<br>
-<br>
-<center> <h2>Examples</h2> </center>
-<h3>Primary Command Syntax</h3>
-
-###### Example 0: Create an object
-Usage: create <class_name>
-```
-(hbnb) create BaseModel
-```
-```
-(hbnb) create BaseModel
-3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb)                   
-```
-###### Example 1: Show an object
-Usage: show <class_name> <_id>
+The project's file structure is as follows:
 
 ```
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-[BaseModel] (3aa5babc-efb6-4041-bfe9-3cc9727588f8) {'id': '3aa5babc-efb6-4041-bfe9-3cc9727588f8', 'created_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96959), 
-'updated_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96971)}
-(hbnb)  
+AirBnB_clone_v2/
+├── console.py
+├── models/
+│   ├── __init__.py
+│   ├── base_model.py
+│   ├── engine/
+│   │   ├── __init__.py
+│   │   ├── file_storage.py
+│   │   └── db_storage.py
+│   ├── user.py
+│   ├── state.py
+│   ├── city.py
+│   ├── amenity.py
+│   ├── place.py
+│   └── review.py
+├── tests/
+│   └── test_models/
+│       ├── __init__.py
+│       ├── test_base_model.py
+│       ├── test_user.py
+│       ├── test_state.py
+│       ├── test_city.py
+│       ├── test_amenity.py
+│       ├── test_place.py
+│       └── test_review.py
+├── setup_mysql_dev.sql
+├── setup_mysql_test.sql
+└── README.md
 ```
-###### Example 2: Destroy an object
-Usage: destroy <class_name> <_id>
-```
-(hbnb) destroy BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-** no instance found **
-(hbnb)   
-```
-###### Example 3: Update an object
-Usage: update <class_name> <_id>
-```
-(hbnb) update BaseModel b405fc64-9724-498f-b405-e4071c3d857f first_name "person"
-(hbnb) show BaseModel b405fc64-9724-498f-b405-e4071c3d857f
-[BaseModel] (b405fc64-9724-498f-b405-e4071c3d857f) {'id': 'b405fc64-9724-498f-b405-e4071c3d857f', 'created_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729889), 
-'updated_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729907), 'first_name': 'person'}
-(hbnb)
-```
-<h3>Alternative Syntax</h3>
 
-###### Example 0: Show all User objects
-Usage: <class_name>.all()
+## Tests
+
+To run the unit tests for the project, use the following command:
+
 ```
-(hbnb) User.all()
-["[User] (99f45908-1d17-46d1-9dd2-b7571128115b) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92071), 'id': '99f45908-1d17-46d1-9dd2-b7571128115b', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92056)}", "[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+python3 -m unittest discover tests
 ```
 
-###### Example 1: Destroy a User
-Usage: <class_name>.destroy(<_id>)
+This command will run all the tests in the `tests` directory.
+
+You can also run tests for a specific file by using the following command:
+
 ```
-(hbnb) User.destroy("99f45908-1d17-46d1-9dd2-b7571128115b")
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+python3 -m unittest tests/test_models/test_base_model.py
 ```
-###### Example 2: Update User (by attribute)
-Usage: <class_name>.update(<_id>, <attribute_name>, <attribute_value>)
+
+This command will run the tests for the `BaseModel` class.
+
+## Database Setup
+
+The project requires a MySQL database for the `DBStorage` engine. The necessary setup scripts are provided in the `setup_mysql_dev.sql` and `setup_mysql_test.sql` files.
+
+To set up the development database, run the following command:
+
 ```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", name "Todd the Toad")
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'name': 'Todd the Toad', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+cat setup_mysql_dev.sql | mysql -hlocalhost -uroot -p
 ```
-###### Example 3: Update User (by dictionary)
-Usage: <class_name>.update(<_id>, <dictionary>)
+
+To set up the test database, run the following command:
+
 ```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", {'name': 'Fred the Frog', 'age': 9})
-(hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+cat setup_mysql_test.sql | mysql -hlocalhost -uroot -p
 ```
-<br>
+
+## Storage Engines
+
+The project supports two storage engines:
+
+1. **FileStorage**: The original storage engine that uses a JSON file to store the data.
+2. **DBStorage**: The new storage engine that uses a MySQL database to store the data.
+
+The storage engine to be used is determined by the `HBNB_TYPE_STORAGE` environment variable.
+
+## Models
+
+The project includes the following models:
+
+- `BaseModel`: The base class for all other models, providing common attributes and methods.
+- `User`: Represents a user of the AirBnB application.
+- `State`: Represents a state.
+- `City`: Represents a city.
+- `Amenity`: Represents an amenity.
+- `Place`: Represents a place (e.g., a rental).
+- `Review`: Represents a review of a place.
+
+Each model is implemented as a Python class that inherits from the `BaseModel` class and includes the necessary SQLAlchemy-specific attributes and relationships.
+
+## Relationships
+
+The project includes the following relationships between the models:
+
+- `User` has a one-to-many relationship with `Place` and `Review`.
+- `State` has a one-to-many relationship with `City`.
+- `City` has a one-to-many relationship with `Place`.
+- `Place` has a many-to-many relationship with `Amenity`.
+- `Place` has a one-to-many relationship with `Review`.
+
+These relationships are implemented using SQLAlchemy's relationship features, including foreign keys and association tables.
+
+## Conclusion
+
+This project demonstrates the transition from a file-based storage system to a database-based storage system using SQLAlchemy. By implementing the `DBStorage` engine, the project can now handle more complex data models and relationships, providing a more robust and scalable storage solution for the AirBnB clone application.
+
