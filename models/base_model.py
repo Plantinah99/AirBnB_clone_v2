@@ -4,9 +4,14 @@ import models
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
+<<<<<<< HEAD
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import String
+=======
+from sqlalchemy import Column, String, DateTime
+from models import storage
+>>>>>>> 2472ff2d42875293c428b71fda9ef0ac538a82c9
 
 Base = declarative_base()
 
@@ -41,10 +46,17 @@ class BaseModel:
                     setattr(self, key, value)
 
     def save(self):
+<<<<<<< HEAD
         """Update updated_at with the current datetime."""
         self.updated_at = datetime.utcnow()
         models.storage.new(self)
         models.storage.save()
+=======
+        """Updates updated_at with current time when instance is changed"""
+        self.updated_at = datetime.now()
+        storage.new(self)
+        storage.save()
+>>>>>>> 2472ff2d42875293c428b71fda9ef0ac538a82c9
 
     def to_dict(self):
         """Return a dictionary representation of the BaseModel instance.

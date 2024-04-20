@@ -1,8 +1,17 @@
 #!/usr/bin/python3
 """Defines the DBStorage engine."""
 from os import getenv
+<<<<<<< HEAD
 from models.base_model import Base
 from models.base_model import BaseModel
+=======
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from models.base_model import BaseModel, Base
+from models.user import User
+from models.state import State
+from models.city import City
+>>>>>>> 2472ff2d42875293c428b71fda9ef0ac538a82c9
 from models.amenity import Amenity
 from models.city import City
 from models.place import Place

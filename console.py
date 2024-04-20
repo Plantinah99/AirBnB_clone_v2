@@ -5,6 +5,10 @@ from shlex import split
 from models import storage
 from datetime import datetime
 from models.base_model import BaseModel
+<<<<<<< HEAD
+=======
+from models import storage
+>>>>>>> 2472ff2d42875293c428b71fda9ef0ac538a82c9
 from models.user import User
 from models.state import State
 from models.city import City
